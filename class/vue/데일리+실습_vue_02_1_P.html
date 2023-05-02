@@ -18,8 +18,8 @@
 <body>
   <div id="app">
     <h1>박스 색상 바꾸기</h1>
-    <h3>색상 : </h3>
-    <div class="box">
+    <h3 >색상 : {{ color }}</h3>
+    <div class="box" v-on:click="ColorChange" :style="{backgroundColor:this.color}" >
     </div>
   </div>
 
@@ -30,9 +30,12 @@
       el: '#app',
       data: {
         colors : ['red', 'orange', 'yellow', 'green', 'blue', 'violet'],
+        color:'',
       },
       methods:{
-        
+        ColorChange: function(){
+          this.color = _.sample(this.colors)
+        } 
       }
     })
   </script>
