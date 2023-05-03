@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .completed{
+            text-decoration: line-through;
+            color: grey;
+        }
+    </style>
 </head>
 <body>
     <div id="todo">
@@ -12,9 +18,12 @@
         <input type="text" v-model="content">
         <button @click="addTodo">+</button>
         <ul>
-           
+          <li v-for="work in TodoList":key="work.date">
+            <input type="checkbox" @click="check(work)">
+            <span :class="{ completed : work.completed }">{{ work.content }}</span>
+          </li> 
         </ul>
-        <button>완료 목록 삭제</button>
+        <button @click="deletelist">완료 목록 삭제</button>
     </div>
 </body>
 
@@ -24,10 +33,28 @@
         el:"#todo",
         data:{
             content:'',
+            TodoList:[]
         },
         methods:{
-            addTodo(event){
-                
+            addTodo: function(){
+                if (this.content ==='') {
+                    alert('내용을 입력해 주세요!')
+                }
+                else {
+                    const work = {
+                        content:this.content,
+                        completed:false,
+                        date: new Date().getTime(),
+                    }
+                    this.TodoList.push(work)
+                    this.content=''
+                }
+            },
+            check: function(work){
+                work.completed = !work.completed
+            },
+            deletelist: function(){
+                this.TodoList=this.TodoList.filter((work) => !work.completed)
             }
         }
     })
