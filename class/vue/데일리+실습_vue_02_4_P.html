@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .completed{
+            text-decoration: line-through;
+            color: grey;
+        }
+    </style>
+</head>
+<body>
+    <div id="todo">
+        <select @change="ChoiceLook($event)" v-model="status">
+            <option selected value="0">전체</option>
+            <option value="1">진행중</option>
+            <option value="2">완료</option>
+        </select>
+        <input type="text" v-model="content">
+        <button @click="addTodo">+</button>
+        <ul>
+            <li v-for="work in TodoList":key="work.date">
+              <input type="checkbox" @click="check(work)">
+              <span :class="{ completed : work.completed }">{{ work.content }}</span>
+            </li> 
+        </ul>
+        <button @click="deletelist">완료된 할 일 지우기</button>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    const Todo = new Vue ({
+        el:"#todo",
+        data:{
+            content:'',
+            TodoList:[]
+        },
+        methods:{
+            addTodo: function(){
+                if (this.content ==='') {
+                    alert('내용을 입력해 주세요!')
+                }
+                else {
+                    const work = {
+                        content:this.content,
+                        completed:false,
+                        date: new Date().getTime(),
+                    }
+                    this.TodoList.push(work)
+                    this.content=''
+                }
+            },
+            check: function(work){
+                work.completed = !work.completed
+            },
+            deletelist: function(){
+                this.TodoList=this.TodoList.filter((work) => !work.completed)
+            },
+            ChoiceLook: function(event){
+                todoListByStatus = 
+            }
+        },
+        computed:{
+            todoListByStatus: function () {
+                return this.todos.filter(todo => {
+                    if (this.status === '1') {
+                        return !todo.isCompleted
+                    }
+                    if (this.status === '2') {
+                        return todo.isCompleted
+                    }
+                    return true
+                })
+        }
+        }
+    })
+
+</script>
+</html>
