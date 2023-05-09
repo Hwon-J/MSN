@@ -9,12 +9,12 @@ export default {
   props: {
     option: Object,
   },
-  methods: {
-    increase() {
-    },
-    decrease() {
-    },
-  },
+  // methods: {
+  //   increase() {
+  //   },
+  //   decrease() {
+  //   },
+  // },
 }
 </script>
 

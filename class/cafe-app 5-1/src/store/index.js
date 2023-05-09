@@ -47,11 +47,12 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
-    addOrder:function (state) {
+    ADD_ORDER:function (state) {
       const menu = state.menuList.find((menu) => menu.selected)
       const size = state.sizeList.find((size) => size.selected)
       const order = { menu, size }
       state.orderList.push(order)
+      console.log(state.orderList)
     },
     updateMenuList: function (state, selectedMenu) {
       state.menuList =  state.menuList.map((menu) => {
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    addOrder(context){
+      context.commit('ADD_ORDER')
+    }
   },
   modules: {
   }

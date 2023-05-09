@@ -12,16 +12,16 @@ export default {
   name: 'OptionList',
   components: {
   },
-  computed: {
-    optionList: function () {
-    },
-  },
-  methods: {
-    increase: function () {
-    },
-    decrease: function () {
-    },
-  },
+  // computed: {
+  //   optionList: function () {
+  //   },
+  // },
+  // methods: {
+  //   increase: function () {
+  //   },
+  //   decrease: function () {
+  //   },
+  // },
 }
 </script>
 
