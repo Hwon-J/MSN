@@ -14,17 +14,22 @@
 </head>
 <body>
     <div id="todo">
-        <select @change="ChoiceLook($event)" v-model="status">
-            <option selected value="0">전체</option>
-            <option value="1">진행중</option>
-            <option value="2">완료</option>
+        {% comment %} select 박스 만들기
+        v-model의 양방향 바인딩을 이용하여 설정된 status의 옵션이 변경될 때마다
+        상태가 자동으로 변경된다. (보이는 목록이 변경됨) {% endcomment %}
+        <select v-model="status">
+            <option value="all">전체</option>
+            <option value="inProgress">진행중</option>
+            <option value="completed">완료</option>
         </select>
         <input type="text" v-model="content">
         <button @click="addTodo">+</button>
         <ul>
-            <li v-for="work in TodoList":key="work.date">
-              <input type="checkbox" @click="check(work)">
-              <span :class="{ completed : work.completed }">{{ work.content }}</span>
+            <li v-for="work in filterList":key="work.date">
+            {% comment %} :checked="work.completed" 는 체크 박스의 상태를 업데이트 하기 위해 필요하다.
+            input요소의 checked 속성을 work.completed 값으로 바인딩하여 상태를 변경한다. {% endcomment %}
+            <input type="checkbox" @click="check(work)" :checked="work.completed">
+            <span :class="{ completed : work.completed }">{{ work.content }}</span>
             </li> 
         </ul>
         <button @click="deletelist">완료된 할 일 지우기</button>
@@ -37,7 +42,21 @@
         el:"#todo",
         data:{
             content:'',
-            TodoList:[]
+            TodoList:[],
+            // 기본 값을 all로 설정
+            status:'all',
+        },
+        // localStorage에 todoList와 status를 만든다.
+        created(){
+            const todoList = JSON.parse(localStorage.getItem('todoList'));
+            const status = localStorage.getItem('status');
+            // 비어있지 않다면 TodoList는 todoList, status는 status
+            if (todoList !== null) {
+                this.TodoList = todoList;
+            }
+            if (status !== null) {
+                this.status = status;
+            } 
         },
         methods:{
             addTodo: function(){
@@ -52,31 +71,40 @@
                     }
                     this.TodoList.push(work)
                     this.content=''
+                    // 입력, 삭제 등 상태가 변경될 때마다 localStorage에 저장한다.
+                    localStorage.setItem('todoList', JSON.stringify(this.TodoList))
                 }
             },
             check: function(work){
                 work.completed = !work.completed
+                localStorage.setItem('todoList', JSON.stringify(this.TodoList))
             },
             deletelist: function(){
                 this.TodoList=this.TodoList.filter((work) => !work.completed)
-            },
-            ChoiceLook: function(event){
-                todoListByStatus = 
+                localStorage.setItem('todoList', JSON.stringify(this.TodoList))
             }
         },
-        computed:{
-            todoListByStatus: function () {
-                return this.todos.filter(todo => {
-                    if (this.status === '1') {
-                        return !todo.isCompleted
-                    }
-                    if (this.status === '2') {
-                        return todo.isCompleted
-                    }
-                    return true
-                })
-        }
-        }
+        // select의 상태에 따라 보여주는 리스트를 변경한다.
+        computed: {
+            filterList() {
+              if (this.status === 'all') {
+                return this.TodoList;
+              } else if (this.status === 'inProgress') {
+                return this.TodoList.filter(work => !work.completed);
+              } else if (this.status === 'completed') {
+                return this.TodoList.filter(work => work.completed);
+              }
+            }
+          },
+        // watch를 통해 status와 TodoList의 상태가 변경되는 것을 확인하고 저장한다.
+        watch: {
+            status: function() {
+                localStorage.setItem('status', this.status);
+            },
+            TodoList: function() {
+                localStorage.setItem('todoList', JSON.stringify(this.TodoList));
+            }
+        },
     })
 
 </script>
