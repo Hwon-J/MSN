@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="order">주문 내역</div>
-    <p class="total">총 {{ totalOrderCount }}건:</p>
+    <p class="total">총 {{ totalOrderCount }}건: {{ totalOrderPrice }}원</p>
     <ul><OrderListItem v-for="(order,index) in orderList" :key="index" :order="order"/></ul>
   </div>
 </template>
@@ -15,15 +15,18 @@ export default {
   },
   computed: {
     orderList: function () {
-      return this.$store.state.orderList
-      
+      return this.$store.state.orderList  
     },
     totalOrderCount: function () {
       return this.$store.state.orderList.length
     },
-    // totalOrderPrice: function () {
-    //   totalcost = 
-    // },
+    totalOrderPrice: function () {
+      let totalcost = 0
+      this.orderList.forEach(order => {
+        totalcost += (order.menu.price + order.size.price)
+      });
+      return totalcost
+    },
   },
 }
 

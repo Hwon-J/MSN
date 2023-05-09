@@ -10,7 +10,7 @@
       </div>
       <div class="pay">
         <p>가격: {{ totalPrice }}원</p>
-      </div>
+      </div>   
     </div>
     <hr>
   </li>  
@@ -31,6 +31,10 @@ export default {
 </script>
 
 <style>
+hr{
+  margin:0;
+  
+}
 .OrderList {
   display: flex;
   justify-content: space-between;
@@ -59,5 +63,6 @@ export default {
   display: inline-block;
   font-size: 13px;
   margin-top: 20px;
+  margin-right: 10px;
 }
 </style>

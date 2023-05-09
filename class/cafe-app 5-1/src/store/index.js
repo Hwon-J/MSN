@@ -43,6 +43,23 @@ export default new Vuex.Store({
         selected: false,
       },
     ],
+    optionList: [
+      {
+        type: '샷',
+        price: 500,
+        count: 0
+      },
+      {
+        type: '바닐라 시럽',
+        price: 500,
+        count: 0
+      },
+      {
+        type: '카라멜 시럽',
+        price: 500,
+        count: 0
+      },
+    ],
   },
   getters: {
   },
@@ -76,6 +93,8 @@ export default new Vuex.Store({
         return size
       })
     },
+    // updateOptionList: function (state, newOption) {
+    // }
   },
   actions: {
     addOrder(context){
