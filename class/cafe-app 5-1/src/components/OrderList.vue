@@ -21,11 +21,7 @@ export default {
       return this.$store.state.orderList.length
     },
     totalOrderPrice: function () {
-      let totalcost = 0
-      this.orderList.forEach(order => {
-        totalcost += (order.menu.price + order.size.price)
-      });
-      return totalcost
+      return this.$store.getters.totalPrice
     },
   },
 }

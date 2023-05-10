@@ -19,7 +19,7 @@ export default new Vuex.Store({
         selected: false,
         image: 'https://source.unsplash.com/featured/?latte',
       },
-      { 
+      {
         title: '카푸치노',
         price: 4500,
         selected: false,
@@ -62,13 +62,28 @@ export default new Vuex.Store({
     ],
   },
   getters: {
+    totalPrice(state) {
+      let total = 0
+      state.orderList.forEach((order) => {
+        let menuPrice = order.menu.price
+        let sizePrice = order.size.price
+        let optionPrice = 0
+        order.options.forEach((option) => {
+          optionPrice += option.price * option.count
+        })
+        total += (menuPrice + sizePrice + optionPrice)
+      })
+      return total
+    }
   },
   mutations: {
-    ADD_ORDER:function (state) {
+    ADD_ORDER: function (state) {
       const menu = state.menuList.find((menu) => menu.selected)
       const size = state.sizeList.find((size) => size.selected)
-      const order = { menu, size }
+      const options = JSON.parse(JSON.stringify(state.optionList.filter((option) => option.count > 0)));
+      const order = { menu, size, options }
       state.orderList.push(order)
+      state.optionList.forEach((option) => option.count = 0)
       console.log(state.orderList)
     },
     updateMenuList: function (state, selectedMenu) {
@@ -93,12 +108,52 @@ export default new Vuex.Store({
         return size
       })
     },
-    // updateOptionList: function (state, newOption) {
-    // }
+    updateOptionList: function (state, newOption) {
+      let optionToUpdate = state.optionList.find((option) => option.type === newOption.type)
+      if (optionToUpdate) {
+        optionToUpdate.count += newOption.count
+        if (optionToUpdate.count <= 0) {
+          state.optionList = state.optionList.filter((option) => option !== optionToUpdate)
+        }
+      } else if (newOption.count > 0) {
+        state.optionList.push(newOption)
+      }
+    },
+    LOAD_ORDERS(state) {
+      const localStorageOrders = localStorage.getItem('orders')
+      const parsedOrders = JSON.parse(localStorageOrders)
+      state.orderList = parsedOrders
+    }
   },
   actions: {
     addOrder(context){
       context.commit('ADD_ORDER')
+      context.dispatch('saveOrdersToLocalStorage')
+    },
+    increaseOptionList(context, option){
+      const newOption = {
+        type: option.type,
+        price: option.price,
+        count: 1
+      }
+      context.commit('updateOptionList', newOption)
+      context.dispatch('saveOrdersToLocalStorage')
+    },
+    decreaseOptionList(context, option){
+      const newOption = {
+        type: option.type,
+        price: option.price,
+        count: -1
+      }
+      context.commit('updateOptionList', newOption)
+      context.dispatch('saveOrdersToLocalStorage')
+    },
+    saveOrdersToLocalStorage(context) {
+      const jsonOrders = JSON.stringify(context.state.orderList)
+      localStorage.setItem('orders', jsonOrders)
+    },
+    loadOrders(context) {
+      context.commit('LOAD_ORDERS')
     }
   },
   modules: {

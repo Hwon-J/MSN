@@ -32,7 +32,10 @@ export default {
     cart(){
       this.$store.dispatch('addOrder')
     }
-  }
+  },
+  created() {
+    this.$store.dispatch('loadOrders')
+  },
 }
 </script>
 

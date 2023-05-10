@@ -19,13 +19,13 @@ export default {
   },
   methods: {
     increase() {
-      this.$store.commit('updateOptionList', 'increase')
+      this.$store.dispatch('increaseOptionList', this.option)
     },
-    // decrease() {
-    //   if (option.count > 0) {
-    //     option.count--
-    //   }
-    // },
+    decrease() {
+      if (this.option.count > 0) {
+        this.$store.dispatch('decreaseOptionList', this.option)
+      }
+    },
   },
 }
 </script>
