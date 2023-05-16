@@ -1,7 +1,6 @@
-const state = () => {
-    return {
-          // todo 리스트 Array
-      list: [
+const todo = {
+  state:{
+    list: [
               // 개별 todo Object
         {
           id: 1638771553377,                // nowDateObj.getTime()
@@ -24,8 +23,7 @@ const state = () => {
           isCompleted: true,
           isImportant: false,
         },
-      ],
-    }
-  }
+      ],}
+}
 
-export default state  
+export default todo
