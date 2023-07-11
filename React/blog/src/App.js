@@ -6,7 +6,7 @@ function App() {
   let post = '강남 우동 맛집';
 
   let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬독학'])
-  let [따봉, 따봉변경] = useState(0);
+  let [따봉, 따봉변경] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
 
   return (
@@ -23,14 +23,16 @@ function App() {
       { 
         글제목.map(function(a, i){
           return (
-          <div className="list">
-            <h4>{ 글제목[i] } 
-            <span onClick={()=>{
-              let copy = [...따봉];
-              copy[i] = copy[i] + 1;
-              따봉변경(copy) 
-              }}>👍</span> { 따봉[i] } </h4>
-            <p>2월 18일 발행</p>
+          <div className="list" key={i}>
+            <h4> 
+              { 글제목[i] } 
+                <span onClick={()=>{ 
+                    let copy = [...따봉];
+                    copy[i] = copy[i] + 1;
+                    따봉변경(copy)  
+                }}>👍</span> {따봉[i]} 
+              </h4>
+            <p>2월 17일 발행</p>
           </div> )
         }) 
       }
