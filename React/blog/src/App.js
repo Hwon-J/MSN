@@ -9,6 +9,7 @@ function App() {
   let [따봉, 따봉변경] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
   let [title, setTitle] = useState(0);
+  let [입력값, 입력값변경] = useState('');
 
   return (
     <div className="App">
@@ -34,13 +35,22 @@ function App() {
                 }}>👍</span> {따봉[i]} 
               </h4>
             <p>2월 17일 발행</p>
+            <button onClick={()=>{
+              let copy = [...글제목];
+              copy.splice(i, 1);
+              글제목변경(copy);
+           }}>삭제</button>
           </div> )
         }) 
       }
 
-      <button onClick={()=>{ setTitle(0) }}> 0번글 </button>
-      <button onClick={()=>{ setTitle(1) }}> 1번글 </button>
-      <button onClick={()=>{ setTitle(2) }}> 2번글 </button>
+      <input onChange={(e)=>
+        입력값변경(e.target.value)}></input>
+        <button onClick={() => 
+        {글제목변경([...글제목, 입력값]);
+        따봉변경([...따봉, 0]);
+        }}>글발행</button>
+
       
       {
         modal==true ? 
