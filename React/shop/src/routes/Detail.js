@@ -1,7 +1,9 @@
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { Nav } from 'react-bootstrap'
+import { useDispatch } from "react-redux"
+import { addItem } from "./../store.js"
 
 let Box = styled.div`
   padding : 20px;
@@ -15,7 +17,7 @@ let YellowBtn = styled.button`
 
 function Detail(props){
 
-
+    let dispatch = useDispatch()
     let { id } = useParams();
     let 찾은상품 = props.shoes.find(function(x){
         return x.id == id
@@ -23,6 +25,8 @@ function Detail(props){
     const [showDiscount, setShowDiscount] = useState(true);
     let [count, setCount] = useState(0);
     let [탭, 탭변경] = useState(0);
+    let [fade2, setFade2] = useState('')
+
 
 
     useEffect(() => {
@@ -35,8 +39,15 @@ function Detail(props){
         return () => clearTimeout(timer);
       }, []);
 
+      useEffect(()=>{
+        setFade2('end')
+        return ()=>{
+          setFade2('')
+        }
+      },[])
+    
     return (
-        <div className="container">
+      <div className={'container start ' + fade2}>
             {showDiscount && <div className='alert alert-warning'>2초 이내 구매시 할인</div>}
             <button onClick={()=>{ setCount(count+1) }}>버튼</button>
             <div className="row">
@@ -47,7 +58,9 @@ function Detail(props){
                 <h4 className="pt-5">{찾은상품.title}</h4>
                 <p>{찾은상품.content}</p>
                 <p>{찾은상품.price}원</p>
-                <button className="btn btn-danger">주문하기</button> 
+                <button className="btn btn-danger" onClick={()=>{
+                  dispatch(addItem( {id : 1, name : 'Red Knit', count : 1} ))
+                }}>주문하기</button> 
                 </div>
             </div>
             <Box>
@@ -70,16 +83,22 @@ function Detail(props){
     )
 }
 
-function TabContent(props){
-    if (props.탭 === 0){
-      return <div>내용0</div>
-    }
-    if (props.탭 === 1){
-      return <div>내용1</div>
-    }
-    if (props.탭 === 2){
-      return <div>내용2</div>
-    }
+function TabContent({탭}){
+
+  let [fade, setFade] = useState('')
+
+  useEffect(()=>{
+    setTimeout(()=>{ setFade('end') }, 100)
+  return ()=>{
+    setFade('')
   }
+  }, [탭])
+
+  return (
+    <div className={'start ' + fade}>
+      { [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][탭] }
+    </div>
+  )
+}
 
 export default Detail

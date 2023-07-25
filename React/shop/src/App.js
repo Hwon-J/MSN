@@ -4,6 +4,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import { useState } from 'react';
 import data from './data.js';
 import Detail from './routes/Detail.js'
+import Cart from './routes/Cart'
 import axios from 'axios'
 
 function App(){
@@ -43,6 +44,7 @@ function App(){
           </div>
         </> } />
         <Route path="/detail/:id" element={ <Detail shoes={shoes}/> }/>
+        <Route path="/cart" element={ <Cart/> } /> 
 
         <Route path="/about" element={ <About/> } >  
           <Route path="member" element={ <div>멤버들</div> } />
